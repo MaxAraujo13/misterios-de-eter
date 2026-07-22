@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <main>
+
+        <form action="">
+
+            <div class="input-group">
+                <label>Nome Completo</label>
+                <input type="text" id="ipt_nome" placeholder="Nome">
+            </div>
+
+            <div class="input-group">
+                <label>E-mail</label>
+                <input type="email" oninput="fEmail()" id="ipt_email" placeholder="nome@email.com">
+            </div>
+
+            <div id="div_email" class="validacao"></div>
+
+            <div class="input-group">
+                <label>CPF</label>
+                <input type="number" oninput="fIdentidade()" id="ipt_cpf" placeholder="123.456.789-10">
+            </div>
+
+            <div class="input-group">
+                <label>Data de Nascimento</label>
+                <input type="date" oninput="fIdentidade()" id="ipt_data" placeholder="01/01/2001">
+            </div>
+
+            <div id="div_identidade" class="validacao"></div>
+
+            <div class="input-group">
+                <label>Senha</label>
+                <input type="password" id="ipt_senha" oninput="fSenha(ipt_senha)" placeholder="Mínimo 8 caract">
+            </div>
+
+            <div id="div_validar" class="validacao"></div>
+
+            <div class="input-group">
+                <label>Confirmar Senha</label>
+                <div class="password-wrapper">
+                    <input type="password" oninput="fSenha(ipt_senhaDnv)" id="ipt_senhaDnv"
+                        placeholder="Repita a senha">
+                </div>
+            </div>
+
+
+            <div id="div_confirmar" class="validacao"></div>
+
+
+            <button type="button" class="btn-primary" onclick="fVerificar()">
+                Criar Conta
+            </button>
+
+        </form>
+
+        <p class="signup-text">Já tem uma conta? <a href="login.html ">Entrar</a></p>
+
+    </main>
+
+
+
+    <script>
+
+
+        function fEmail() { // pra validar se o email ta ok e mostrar na div, para o usuario mudar antes de cadastrar
+
+            let email = ipt_email.value;
+
+            let com = email.endsWith(".com");
+
+            let arroba = email.includes("@");
+
+            let emailFoi = false;
+
+
+            if (!com || !arroba) {
+
+                div_email.innerHTML = "Por favor, insira um email válido";
+
+                console.log('passe no if email ')
+
+            } else {
+
+                div_email.innerHTML = " "
+
+                emailFoi = true;
+
+            }
+
+            return emailFoi;
+
+
+        }
+
+        function fSenha() { // pra ver se a senha ta ok e mostrar na div antes de cadastrar
+
+
+            div_validar.innerHTML = ' ';
+
+            div_confirmar.innerHTML = ' ';
+
+            let senha = ipt_senha.value;
+
+            let senhaDnv = ipt_senhaDnv.value;
+
+            let especial = ['!', '@', '#', '$', '%', '&', '*'];
+
+            let numero = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+            let temNumero = false;
+
+            let temEspecial = false;
+
+            let senhaFoi = false;
+
+            for (let i = 0; i < numero.length; i++) {
+
+                if (senha.includes(numero[i])) {
+
+                    temNumero = true;
+                };
+
+            };
+
+            for (let i = 0; i < especial.length; i++) {
+
+                if (senha.includes(especial[i])) {
+
+                    temEspecial = true;
+                };
+
+            };
+
+
+            if (senha.length < 8) {
+
+                div_validar.innerHTML = "Insira uma combinação de pelo menos oito caracteres ";
+
+                console.log('passe no if tamanho senha ')
+
+            } else if (senha == senha.toUpperCase()) {
+
+                div_validar.innerHTML = "Insira pelo menos uma letra minúscula"
+
+
+            } else if (senha == senha.toLowerCase()) {
+
+                div_validar.innerHTML = "Insira pelo menos uma letra maiúscula"
+
+
+            } else if (!temNumero) {
+
+                div_validar.innerHTML = " Insira pelo menos um número ";
+
+                console.log('passe no if numero ');
+
+            } else if (!temEspecial) {
+
+                div_validar.innerHTML = " Insira pelo menos um caractere especial. Ex: '#', '!'";
+
+                console.log('passe no if especial ');
+
+
+            } else if (senha != senhaDnv) {
+
+                div_confirmar.innerHTML = " A senha e a senha de confirmação precisam ser iguais";
+
+                console.log('passe no if senha dnv ');
+
+            } else {
+
+                div_validar.innerHTML = ' ';
+
+                div_confirmar.innerHTML = ' ';
+
+                senhaFoi = true;
+
+            };
+
+            return senhaFoi;
+
+
+
+        }
+
+        function fVerificar() { // valida na hora de cadastrar, pra evitar passar dados errados pro banco de dados
+
+            let nome = ipt_nome.value;
+
+            let email = ipt_email.value;
+
+            let senha = ipt_senha.value;
+
+            let emailOk = fEmail();
+
+            let senhaOk = fSenha(); // pega o valor que a function retornou, otimiza o código
+
+            let senhaDnv = ipt_senhaDnv.value;
+
+            let entidade = select_entidade.value;
+
+            let estado = ipt_estado.value;
+
+            let erro = ""; // variavel que rcebe a mensagem de erro, caso tenha
+
+
+
+
+            // validações antes de cadastrar
+            if (nome == "" || email == "" || senha == "" || senhaDnv == "" || entidade == "" || estado == "") {
+
+                erro = "Por favor, preencha todos os campos!";
+
+                console.log('passe no if');
+
+            } else if (!email) {
+
+                erro = "Por favor, verifique seus dados e tente novamente"
+
+            } else if (!senha) {
+
+                erro = "Por favor, verifique seus dados e tente novamente"
+
+            }
+
+            if (estado.length > 2) {
+
+                erro = `Preecha a UF do estado em que você reside`
+
+            }
+
+            if (erro != "") { // ve se tem alguma mensagem na variavel erro, se tiver, exibe no alert. Se não, cadastra
+
+                div_botao.innerHTML = `${erro}`;
+
+            } else { }
+
+        }
+
+
+
+
+    </script>
+
+</body>
+
+</html>

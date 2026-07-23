@@ -14,38 +14,38 @@
         <form action="">
 
             <div class="input-group">
-                <label>Nome Completo</label>
+                <label for="ipt_nome">Nome Completo</label>
                 <input type="text" id="ipt_nome" placeholder="Nome">
             </div>
 
             <div class="input-group">
-                <label>E-mail</label>
+                <label for="ipt_email">E-mail</label>
                 <input type="email" oninput="fEmail()" id="ipt_email" placeholder="nome@email.com">
             </div>
 
             <div id="div_email" class="validacao"></div>
 
             <div class="input-group">
-                <label>CPF</label>
-                <input type="number" oninput="fIdentidade()" id="ipt_cpf" placeholder="123.456.789-10">
+                <label for="ipt_cpf">CPF</label>
+                <input type="text" oninput="fIdentidade()" id="ipt_cpf" placeholder="123.456.789-10">
             </div>
 
             <div class="input-group">
-                <label>Data de Nascimento</label>
+                <label for="ipt_data">Data de Nascimento</label>
                 <input type="date" oninput="fIdentidade()" id="ipt_data" placeholder="01/01/2001">
             </div>
 
             <div id="div_identidade" class="validacao"></div>
 
             <div class="input-group">
-                <label>Senha</label>
+                <label for="ipt_senha">Senha</label>
                 <input type="password" id="ipt_senha" oninput="fSenha(ipt_senha)" placeholder="Mínimo 8 caract">
             </div>
 
             <div id="div_validar" class="validacao"></div>
 
             <div class="input-group">
-                <label>Confirmar Senha</label>
+                <label for="ipt_senhaDnv">Confirmar Senha</label>
                 <div class="password-wrapper">
                     <input type="password" oninput="fSenha(ipt_senhaDnv)" id="ipt_senhaDnv"
                         placeholder="Repita a senha">
@@ -55,20 +55,35 @@
 
             <div id="div_confirmar" class="validacao"></div>
 
+            <div id="div_botao" class="validacao"></div>
 
             <button type="button" class="btn-primary" onclick="fVerificar()">
                 Criar Conta
             </button>
 
+
         </form>
 
-        <p class="signup-text">Já tem uma conta? <a href="login.html ">Entrar</a></p>
+        <p class="signup-text">Já tem uma conta? <a href="login.html">Entrar</a></p>
 
     </main>
 
 
 
     <script>
+
+
+        const ipt_nome = document.getElementById("ipt_nome");
+
+        const ipt_email = document.getElementById("ipt_email");
+
+        const ipt_senha = document.getElementById("ipt_senha");
+
+        const ipt_data = document.getElementById("ipt_data");
+
+        const ipt_senhaDnv = document.getElementById("ipt_senhaDnv");
+
+        const ipt_cpf = document.getElementById("ipt_cpf");
 
 
         function fEmail() { // pra validar se o email ta ok e mostrar na div, para o usuario mudar antes de cadastrar
@@ -103,14 +118,13 @@
 
         function fSenha() { // pra ver se a senha ta ok e mostrar na div antes de cadastrar
 
+            let senha = ipt_senha.value;
+
+            let senhaDnv = ipt_senhaDnv.value;
 
             div_validar.innerHTML = ' ';
 
             div_confirmar.innerHTML = ' ';
-
-            let senha = ipt_senha.value;
-
-            let senhaDnv = ipt_senhaDnv.value;
 
             let especial = ['!', '@', '#', '$', '%', '&', '*'];
 
@@ -198,43 +212,42 @@
 
             let email = ipt_email.value;
 
+            let cpf = ipt_cpf.value;
+
             let senha = ipt_senha.value;
+
+            let senhaDnv = ipt_senhaDnv.value;
+
+            let dtNasc = ipt_data.value;
 
             let emailOk = fEmail();
 
             let senhaOk = fSenha(); // pega o valor que a function retornou, otimiza o código
 
-            let senhaDnv = ipt_senhaDnv.value;
+            let cpfSemPonto = cpf.replaceAll(".", "");// substitui todos os pontos, por um espaço vazio.
 
-            let entidade = select_entidade.value;
-
-            let estado = ipt_estado.value;
+            let cpfLimpo = cpfSemPonto.replace("-", ""); // sem traço.
 
             let erro = ""; // variavel que rcebe a mensagem de erro, caso tenha
 
-
-
-
             // validações antes de cadastrar
-            if (nome == "" || email == "" || senha == "" || senhaDnv == "" || entidade == "" || estado == "") {
+            if (nome == "" || email == "" || senha == "" || senhaDnv == "" || cpf == "" || dtNasc == "") {
 
                 erro = "Por favor, preencha todos os campos!";
 
                 console.log('passe no if');
 
-            } else if (!email) {
+            } else if (!emailOk) {
 
-                erro = "Por favor, verifique seus dados e tente novamente"
+                erro = "Por favor, insira um e-mail válido e tente novamente"
 
-            } else if (!senha) {
+            } else if (!senhaOk) {
 
-                erro = "Por favor, verifique seus dados e tente novamente"
+                erro = "Por favor, insira uma senha válida e tente novamente"
 
-            }
+            } else if (cpfLimpo.length != 11) {
 
-            if (estado.length > 2) {
-
-                erro = `Preecha a UF do estado em que você reside`
+                erro = `Por favor, insira um CPF válido e tente novamente`
 
             }
 
